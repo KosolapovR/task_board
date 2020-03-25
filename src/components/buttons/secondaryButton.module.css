@@ -1,0 +1,28 @@
+.root{
+    display: flex;
+    border-radius: 3px;
+    max-width: 256px;
+    height: 32px;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color ease-in-out .2s;
+}
+
+.root:hover{
+    background: #C4C4C4;
+}
+
+.root:active{
+    background: #9d9d9d;
+}
+
+.icon_container{
+    min-width: 20px;
+    padding: 10px;
+}
+
+.icon{
+    width: 12px;
+    height: auto;
+}
