@@ -80,11 +80,15 @@ class TaskBoard extends Component {
       selected: [],
       res: [],
       modalVisible: false,
-      modalItem: {}
+      modalItem: {},
+      addTaskInWork: false,
+      addTaskOnCheck: false,
+      addTaskCompleted: false
     };
   }
 
   componentDidMount() {
+    console.log(this.props);
     this.setState({
       items: this.props.inWork,
       selected: this.props.onCheck,
@@ -253,7 +257,7 @@ class TaskBoard extends Component {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <ListFooter />
+                  <ListFooter editMode={this.state.addTaskInWork} />
                 </div>
               )}
             </Droppable>
@@ -289,7 +293,7 @@ class TaskBoard extends Component {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <ListFooter />
+                  <ListFooter editMode={this.state.addTaskOnCheck}/>
                 </div>
               )}
             </Droppable>
@@ -326,7 +330,7 @@ class TaskBoard extends Component {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <ListFooter editMode={true} />
+                  <ListFooter editMode={this.state.addTaskCompleted} />
                 </div>
               )}
             </Droppable>
@@ -346,11 +350,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     // dispatching plain actions
-    updateTaskStatus: () => dispatch({ type: "CHANGE_TASK_STATUS" })
+    updateTaskStatus: (tasks) => dispatch(changeTaskStatus(tasks))
   };
 };
 
-// Put the things into the DOM!
 export default connect(
   mapStateToProps,
   mapDispatchToProps

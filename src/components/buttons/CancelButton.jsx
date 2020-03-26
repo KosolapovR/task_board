@@ -22,6 +22,7 @@ function CancelButton(props) {
   const classes = useStyles();
   return (
     <Button
+        onClick={props.onClick}
       variant="text"
       color="secondary"
       className={classes.button}

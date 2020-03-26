@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import SecondaryButton from "./buttons/SecondaryButton";
 import PrimaryButton from "./buttons/PrimaryButton";
 import { Grid, TextField } from "@material-ui/core";
@@ -12,8 +12,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function ListFooter({ editMode = false }) {
+function ListFooter() {
   const classes = useStyles();
+  const [editMode, setEditMode] = useState(false);
   return (
     <>
       {editMode ? (
@@ -29,15 +30,15 @@ function ListFooter({ editMode = false }) {
           </form>
           <Grid container>
             <Grid item>
-              <PrimaryButton />
+              <PrimaryButton label='Добавить'/>
             </Grid>
             <Grid item>
-              <CancelButton />
+              <CancelButton onClick={()=> {setEditMode(false)}} />
             </Grid>
           </Grid>
         </>
       ) : (
-        <SecondaryButton />
+        <SecondaryButton onClick={()=> {setEditMode(true)}}/>
       )}
     </>
   );

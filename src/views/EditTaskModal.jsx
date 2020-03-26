@@ -5,6 +5,7 @@ import Modal from "@material-ui/core/Modal";
 import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import EditForm from "../components/EditForm";
+import {changeTaskStatus, updateTaskBody} from "../state/task_board/actions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const EditTaskModal = ({ task, hideModal, pristine, ...props }) => {
+const EditTaskModal = ({ task, hideModal, pristine, updateTaskBody }) => {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
 
@@ -38,7 +39,9 @@ const EditTaskModal = ({ task, hideModal, pristine, ...props }) => {
   };
 
   const handleSubmit = values => {
-    console.log(values);
+    const updatedTask = {...task, body: values.body};
+
+    updateTaskBody(updatedTask);
   };
 
   return (
@@ -65,4 +68,11 @@ const EditTaskModal = ({ task, hideModal, pristine, ...props }) => {
   );
 };
 
-export default EditTaskModal;
+const mapDispatchToProps = dispatch => {
+  return {
+    // dispatching plain actions
+    updateTaskBody: (task) => dispatch(updateTaskBody(task))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(EditTaskModal);
