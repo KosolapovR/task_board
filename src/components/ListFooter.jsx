@@ -1,47 +1,65 @@
 import React, {useState} from "react";
 import SecondaryButton from "./buttons/SecondaryButton";
-import PrimaryButton from "./buttons/PrimaryButton";
-import { Grid, TextField } from "@material-ui/core";
-import CancelButton from "./buttons/CancelButton";
-import { makeStyles } from "@material-ui/core/styles";
+import AddForm from "./AddForm";
+import {connect} from "react-redux";
+import {addCompletedTask, addInWorkTask, addOnCheckTask} from "../state/task_board";
 
-const useStyles = makeStyles(theme => ({
-  textarea: {
-    background: "#ffffff",
-    width: "100%"
-  }
-}));
+const ListFooter = ({type, addInWorkTask, addOnCheckTask, addCompletedTask}) => {
 
-function ListFooter() {
-  const classes = useStyles();
-  const [editMode, setEditMode] = useState(false);
-  return (
-    <>
-      {editMode ? (
+    const [editMode, setEditMode] = useState(false);
+
+    const submit = ({taskHeader}) => {
+
+        if (taskHeader) {
+            switch (type) {
+                case 'inWork': {
+                    addInWorkTask(taskHeader);
+                    setEditMode(false);
+                    break;
+                }
+                case 'onCheck': {
+                    addOnCheckTask(taskHeader);
+                    setEditMode(false);
+                    break;
+                }
+                case 'completed': {
+                    addCompletedTask(taskHeader);
+                    setEditMode(false);
+                    break;
+                }
+                default: {
+                    break;
+                }
+
+            }
+        }
+    };
+
+    return (
         <>
-          <form noValidate autoComplete="off">
-            <TextField
-              className={classes.textarea}
-              id="outlined-basic"
-              multiline
-              variant="outlined"
-              rows="2"
-            />
-          </form>
-          <Grid container>
-            <Grid item>
-              <PrimaryButton label='Добавить'/>
-            </Grid>
-            <Grid item>
-              <CancelButton onClick={()=> {setEditMode(false)}} />
-            </Grid>
-          </Grid>
+            {editMode ? (
+                <>
+                    <AddForm form={`addTask${type}`} onSubmit={submit} handleClose={() => {
+                        setEditMode(false)
+                    }}/>
+                </>
+            ) : (
+                <SecondaryButton onClick={() => {
+                    setEditMode(true)
+                }}/>
+            )}
         </>
-      ) : (
-        <SecondaryButton onClick={()=> {setEditMode(true)}}/>
-      )}
-    </>
-  );
+    );
 }
 
-export default ListFooter;
+const mapStateToProps = state => ({
+    state
+})
+
+const mapDispatchToProps = dispatch => ({
+    addInWorkTask: (header) => dispatch(addInWorkTask(header)),
+    addOnCheckTask: (header) => dispatch(addOnCheckTask(header)),
+    addCompletedTask: (header) => dispatch(addCompletedTask(header))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListFooter);
