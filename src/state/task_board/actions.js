@@ -1,4 +1,4 @@
-import {UPDATE_TASK_BODY} from "./types";
+import {ADD_TASK, UPDATE_TASK_BODY} from "./types";
 import {CHANGE_TASK_STATUS} from "./types";
 
 const updateTaskBody = payload => ({
@@ -11,4 +11,9 @@ const changeTaskStatus = payload => ({
   payload
 });
 
-export { updateTaskBody, changeTaskStatus };
+const addTask = payload => ({
+  type: ADD_TASK,
+  payload
+});
+
+export { updateTaskBody, changeTaskStatus, addTask };

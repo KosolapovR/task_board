@@ -257,7 +257,7 @@ class TaskBoard extends Component {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <ListFooter editMode={this.state.addTaskInWork} />
+                  <ListFooter type="inWork"/>
                 </div>
               )}
             </Droppable>
@@ -293,7 +293,7 @@ class TaskBoard extends Component {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <ListFooter editMode={this.state.addTaskOnCheck}/>
+                  <ListFooter type="onCheck"/>
                 </div>
               )}
             </Droppable>
@@ -330,7 +330,7 @@ class TaskBoard extends Component {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <ListFooter editMode={this.state.addTaskCompleted} />
+                  <ListFooter type="completed" />
                 </div>
               )}
             </Droppable>
