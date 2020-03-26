@@ -1,12 +1,30 @@
-import React from 'react';
+import React from "react";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 
-function PrimaryButton(props) {
-    return (
+const useStyles = makeStyles(theme => ({
+  button: {
+    margin: theme.spacing(1),
+    background: "#0C7CD5",
+    marginLeft: 0,
+    fontSize: "13px",
+    textTransform: "inherit"
+  }
+}));
 
-        <div>
-            Добавить карточку
-        </div>
-    );
+function PrimaryButton({ label, handleSubmit }) {
+  const classes = useStyles();
+  return (
+    <Button
+      type="submit"
+      onSubmit={handleSubmit}
+      variant="contained"
+      color="primary"
+      className={classes.button}
+    >
+      {label}
+    </Button>
+  );
 }
 
 export default PrimaryButton;
