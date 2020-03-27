@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import {connect} from "react-redux";
 import {createMuiTheme} from "@material-ui/core/styles";
@@ -7,6 +7,7 @@ import ListFooter from "../components/ListFooter";
 import EditTaskModal from "./EditTaskModal";
 import {changeTaskStatus} from "../state/task_board/actions";
 import LinesEllipsis from 'react-lines-ellipsis'
+import {Redirect, Route, Switch} from "react-router-dom";
 
 const theme = createMuiTheme({
     palette: {
@@ -72,7 +73,7 @@ const getListStyle = isDraggingOver => ({
     borderRadius: "5px"
 });
 
-class TaskBoard extends Component {
+class TaskBoard extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -83,7 +84,9 @@ class TaskBoard extends Component {
             modalItem: {},
             addTaskInWork: false,
             addTaskOnCheck: false,
-            addTaskCompleted: false
+            addTaskCompleted: false,
+            redirect: false,
+            redirectToModal: false,
         };
     }
 
@@ -180,6 +183,14 @@ class TaskBoard extends Component {
             });
         }
 
+        if (prevState.redirect !== this.state.redirect) {
+            this.setState({redirect: false});
+        }
+
+        if (prevState.redirectToModal !== this.state.redirectToModal) {
+            this.setState({redirectToModal: false});
+        }
+
         if (
             prevState.items.length !== this.state.items.length ||
             prevState.selected.length !== this.state.selected.length ||
@@ -194,25 +205,31 @@ class TaskBoard extends Component {
     }
 
     showModal = editableItem => {
-        this.setState({modalVisible: true});
+        this.setState({redirectToModal: true});
         this.setState({modalItem: editableItem});
     };
 
     handleModalClose = () => {
-        this.setState({modalVisible: false});
+        this.setState({redirect: true});
     };
 
     render() {
         return (
             <ThemeProvider theme={theme}>
-                {this.state.modalVisible && (
-                    <EditTaskModal
-                        task={this.state.modalItem}
-                        hideModal={() => {
-                            this.handleModalClose();
-                        }}
-                    />
-                )}
+                {this.state.redirectToModal && <Redirect to={`/task/${this.state.modalItem.id.substring(5)}`}/>}
+                {this.state.redirect && <Redirect to='/'/>}
+                <Switch>
+                    <Route path="/task/:id"
+                    >
+                        <EditTaskModal
+                            task={this.state.modalItem}
+                            hideModal={() => {
+                                this.handleModalClose();
+                            }}
+                        />
+                    </Route>
+                </Switch>
+
                 <div
                     style={{
                         display: "flex",
@@ -311,7 +328,6 @@ class TaskBoard extends Component {
                                 </div>
                             )}
                         </Droppable>
-
                         <Droppable droppableId="droppable3">
                             {(provided, snapshot) => (
                                 <div

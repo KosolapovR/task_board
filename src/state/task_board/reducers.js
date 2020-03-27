@@ -1,17 +1,18 @@
-import {UPDATE_TASK_BODY, CHANGE_TASK_STATUS, ADD_IN_WORK_TASK, ADD_ON_CHECK_TASK, ADD_COMPLETED_TASK} from "./types";
+import {
+    UPDATE_TASK_BODY,
+    CHANGE_TASK_STATUS,
+    ADD_IN_WORK_TASK,
+    ADD_ON_CHECK_TASK,
+    ADD_COMPLETED_TASK,
+    GET_CURRENT_TASK
+} from "./types";
 
 const initialState = {
-    lastTaskIndex: 3,
-    inWork: [
-        {id: "item-0", header: "Первая задача", body: "Описание первой задачи"},
-        {id: "item-1", header: "Первая-a задача", body: "Описание первой-a задачи"}
-    ],
-    onCheck: [
-        {id: "item-2", header: "Вторая задача", body: "Описание второй задачи"}
-    ],
-    completed: [
-        {id: "item-3", header: "Третья задача", body: "Описание третьей задачи"}
-    ]
+    lastTaskIndex: 0,
+    inWork: [],
+    onCheck: [],
+    completed: [],
+    currentTask: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -91,6 +92,47 @@ const reducer = (state = initialState, action) => {
                     }],
                     lastTaskIndex: state.lastTaskIndex + 1
                 }
+            }
+            case GET_CURRENT_TASK: {
+                const newState = {...state};
+
+                const inWorkUpdate = newState.inWork.filter((el, i) => el.id === action.payload.id);
+                const onCheckUpdate = newState.onCheck.filter((el, i) => el.id === action.payload.id);
+                const completedUpdate = newState.completed.filter((el, i) => el.id === action.payload.id);
+                switch (1) {
+                    case inWorkUpdate.length: {
+                        for (let i = 0; i < newState.inWork.length; i++) {
+                            if (newState.inWork[i]['id'] === action.payload.id) {
+                                newState.currentTask = newState.inWork[i];
+                                return newState;
+                            }
+                        }
+                        break;
+                    }
+                    case onCheckUpdate.length: {
+
+                        for (let i = 0; i < newState.onCheck.length; i++) {
+                            if (newState.onCheck[i]['id'] === action.payload.id) {
+                                newState.currentTask = newState.onCheck[i];
+                                return newState;
+                            }
+                        }
+                        break;
+                    }
+                    case completedUpdate.length: {
+
+                        for (let i = 0; i < newState.completed.length; i++) {
+                            if (newState.completed[i]['id'] === action.payload.id) {
+                                newState.currentTask = newState.completed[i];
+                                return newState;
+                            }
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return newState;
             }
             default:
                 return state;

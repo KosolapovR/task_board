@@ -50,11 +50,11 @@ const ListFooter = ({type, addInWorkTask, addOnCheckTask, addCompletedTask}) => 
             )}
         </>
     );
-}
+};
 
 const mapStateToProps = state => ({
     state
-})
+});
 
 const mapDispatchToProps = dispatch => ({
     addInWorkTask: (header) => dispatch(addInWorkTask(header)),
