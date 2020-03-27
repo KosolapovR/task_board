@@ -1,10 +1,9 @@
-import React, {useEffect} from "react";
+import React from "react";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import {reduxForm, Field} from "redux-form";
 import {makeStyles} from "@material-ui/core/styles";
 import {Grid, TextField} from "@material-ui/core";
 import CancelButton from "./buttons/CancelButton";
-import Button from "@material-ui/core/Button";
 
 
 const useStyles = makeStyles(theme => ({

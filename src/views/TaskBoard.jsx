@@ -225,6 +225,7 @@ class TaskBoard extends Component {
                         background: "#1D8B77"
                     }}
                 >
+
                     <DragDropContext onDragEnd={this.onDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided, snapshot) => (
@@ -354,6 +355,7 @@ class TaskBoard extends Component {
                             )}
                         </Droppable>
                     </DragDropContext>
+
                 </div>
             </ThemeProvider>
         );
