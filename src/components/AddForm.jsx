@@ -10,6 +10,7 @@ const useStyles = makeStyles(theme => ({
     textarea: {
         background: "#ffffff",
         width: "100%",
+        borderRadius: '5px'
     }
 }));
 
@@ -20,6 +21,7 @@ const EditableField = field => {
             className={classes.textarea}
             rows={2}
             multiline
+            required
             variant="outlined"
             placeholder="Название задачи"
             {...field.input}

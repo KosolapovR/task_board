@@ -1,12 +1,10 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {connect} from "react-redux";
 import {makeStyles} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
-import {Grid} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
 import EditForm from "../components/EditForm";
-import {updateTaskBody} from "../state/task_board/actions";
-import LinesEllipsis from "react-lines-ellipsis";
+import {getCurrentTask, updateTaskBody} from "../state/task_board/actions";
+import {useParams} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -19,34 +17,31 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "#D4D4D4",
         border: "0px",
         borderRadius: "5px",
-        padding: "16px"
+        padding: "16px",
+        outline: 0
     },
-    closeIcon: {
-        cursor: "pointer",
-        color: "#626262",
-        transform: "rotate(45deg)",
-        "&:hover": {
-            color: "#323232"
-        }
-    },
-    header:{
-        boxOrient: 'vertical',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        height: 'content-fit',
-        maxWidth: '520px',
-    }
 }));
 
-const EditTaskModal = ({task, hideModal, updateTaskBody}) => {
+const EditTaskModal = ({currentTask, hideModal, updateTaskBody, getCurrentTask}) => {
     const classes = useStyles();
+
+    let { id } = useParams();
+
+    const task = {id: `item-${id}`};
+
+    console.log(task);
+
+    useEffect(()=> {
+        getCurrentTask(task)
+    }, [task]);
 
     const handleClose = () => {
         hideModal();
     };
 
     const handleSubmit = values => {
-        const updatedTask = {...task, body: values.body};
+        console.log(values);
+        const updatedTask = {...currentTask, body: values.body, header: values.header};
         updateTaskBody(updatedTask);
         hideModal();
     };
@@ -60,31 +55,22 @@ const EditTaskModal = ({task, hideModal, updateTaskBody}) => {
                 onClose={handleClose}
             >
                 <div className={classes.paper}>
-                    <Grid container justify="space-between">
-                        <Grid className={classes.header} item>
-                            <LinesEllipsis
-                                text={task.header}
-                                maxLine='2'
-                                ellipsis='...'
-                                trimRight
-                                basedOn='letters'
-                            />
-                        </Grid>
-                        <Grid item>
-                            <AddIcon className={classes.closeIcon} onClick={handleClose}/>
-                        </Grid>
-                    </Grid>
-                    <EditForm onSubmit={handleSubmit} task={task}/>
+                    <EditForm onSubmit={handleSubmit} handleClose={handleClose} task={currentTask}/>
                 </div>
             </Modal>
         </div>
     );
 };
 
+const mapStateToProps = state => ({
+    currentTask: state.task_board.currentTask
+});
+
 const mapDispatchToProps = dispatch => {
     return {
-        updateTaskBody: (task) => dispatch(updateTaskBody(task))
+        updateTaskBody: (task) => dispatch(updateTaskBody(task)),
+        getCurrentTask: (task) => dispatch(getCurrentTask(task))
     };
 };
 
-export default connect(null, mapDispatchToProps)(EditTaskModal);
+export default connect(mapStateToProps, mapDispatchToProps)(EditTaskModal);
